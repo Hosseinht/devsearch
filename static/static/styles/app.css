@@ -511,6 +511,7 @@ img {
 
 .project__thumbnail {
   height: 25rem;
+  width: 30rem;
   object-fit: cover;
   object-position: top center;
 }
