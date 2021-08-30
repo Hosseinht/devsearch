@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .utils import search_profiles
 from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
@@ -77,7 +78,21 @@ def profile(request):
     #                                              Q(skill__in=skills)  # query child
     #                                              )
     profiles, search_query = search_profiles(request)
-    context = {'profiles': profiles, 'search_query': search_query}
+
+    page = request.GET.get('page')
+    results = 6
+    paginator = Paginator(profiles, results)
+
+    try:
+        profiles = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        profiles = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages  # it gives the last page
+        profiles = paginator.page(page)
+
+    context = {'profiles': profiles, 'search_query': search_query,  'paginator': paginator}
     return render(request, 'users/profiles.html', context)
 
 
