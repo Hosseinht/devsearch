@@ -14,7 +14,7 @@ def login_user(request):
     if request.user.is_authenticated:
         return redirect('profile')
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
 
         # when a user submit we want to output certain errors if something goes wrong
@@ -27,7 +27,8 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)  # create a session base token and add it to cookies
-            return redirect('profile')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'account')
+            # We can use GET cuz we cleaned the action in login form even thou this is  POST
         else:
             messages.error(request, 'Username or password is incorrect')
 

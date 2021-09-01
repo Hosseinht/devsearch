@@ -11,7 +11,7 @@
 }
 
 img {
- width: 45rem;
+ width: 100%;
 }
 
 .tag > i.im {
@@ -511,8 +511,9 @@ img {
 
 .project__thumbnail {
   height: 25rem;
+  width:500px;
   object-fit: cover;
-  object-position: top center;
+  object-position: top center ;
 }
 
 .project__title {
